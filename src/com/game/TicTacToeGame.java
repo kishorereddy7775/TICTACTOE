@@ -37,28 +37,29 @@ public class TicTacToeGame {
 	}
 	
 	public void move(Cell cell) {
+		if(!validateCell(cell)) {
+			System.out.println("Already Filled Cell");
+			return;
+		}
+		if(!isGameActive()) {
+			System.out.println("Game already Completed");
+			return;
+		}
 		Player curPlayer=turn.poll();
 		move(curPlayer,cell);
 		turn.add(curPlayer);
 	}
 	
 	private void move(Player p, Cell cell) {
-		if(!validateCell(cell)) {
-			return;
-		}
 		board.addMove(cell, p);
 		board.updateState(p, cell);
 		updateWinner(p);
 	}
 	private boolean validateCell(Cell cell) {
-		if(board.getGrid()[cell.getRow()][cell.getCol()]!='.') {
-			System.out.println("Already Filled Cell");
-			return false;
-		}else if(board.getState()==State.WIN) {
-			System.out.println(winner.getUser().getName()+" already won the game");
-			return false;
-		}
-		return true;
+		return board.isEmpty(cell);
+	}
+	private boolean isGameActive() {
+		return board.getState()==State.ACTIVE;
 	}
 	private void updateWinner(Player p) {
 		if(board.getState()==State.WIN) {

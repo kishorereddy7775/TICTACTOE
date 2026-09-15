@@ -23,8 +23,8 @@ public class Board {
 		state=State.ACTIVE;
 		count=new HashMap<>();
 	}
-	public char[][] getGrid(){
-		return grid;
+	public boolean isEmpty(Cell cell) {
+		return grid[cell.getRow()][cell.getCol()]=='.';
 	}
 	public void addMove(Cell cell, Player p) {
 		grid[cell.getRow()][cell.getCol()]=p.getSymbol();
@@ -40,12 +40,11 @@ public class Board {
 		filled++;
 	}
 	public void updateState(Player p, Cell cell) {
-		if(filled==size*size) {
-			state=State.DRAW;
-			return;
-		}
 		if(isWin(p,cell)) {
 			state=State.WIN;
+		}else if(filled==size*size) {
+			state=State.DRAW;
+			return;
 		}
 	}
 	private boolean isRowMatched(Player p,Cell cell) {
